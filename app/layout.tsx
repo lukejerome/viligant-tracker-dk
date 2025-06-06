@@ -31,9 +31,7 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
       </head>
       <body className={inter.className}>
-        <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20 overflow-x-hidden">
-          {children}
-        </div>
+        <div className="min-h-screen bg-[#222222] overflow-x-hidden">{children}</div>
       </body>
     </html>
   )

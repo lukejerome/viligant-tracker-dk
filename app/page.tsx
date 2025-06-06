@@ -143,21 +143,6 @@ function FitnessAppContent() {
 
   const renderDashboard = () => (
     <div className="space-y-6 animate-fade-in">
-      {/* Welcome Message */}
-      <Card className="card-hover bg-gradient-to-br from-card to-card/50 border-border/50 backdrop-blur-sm">
-        <CardContent className="p-6">
-          <div className="flex flex-col items-center text-center gap-4 md:flex-row md:text-left">
-            <div className="flex justify-center">
-              <ViligantLogo size={80} />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold">Welcome back, {user.name}!</h2>
-              <p className="text-muted-foreground">Ready to crush your fitness goals today?</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Enhanced Quick Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="card-hover bg-gradient-to-br from-card to-card/50 border-border/50 backdrop-blur-sm">
