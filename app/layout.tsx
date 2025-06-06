@@ -6,16 +6,16 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Fitness Tracker",
+  title: "Viligant Fitness Tracker",
   description: "Track workouts, calories, and achieve your weight goals",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
   themeColor: "#22c55e",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Fitness Tracker",
+    title: "Viligant Fitness Tracker",
   },
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({

@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import {
-  Activity,
   Target,
   Flame,
   TrendingUp,
@@ -18,6 +17,7 @@ import {
   Menu,
   X,
   User,
+  Activity,
 } from "lucide-react"
 import WorkoutTracker from "./components/workout-tracker"
 import CalorieTracker from "./components/calorie-tracker"
@@ -28,6 +28,7 @@ import UserProfile from "./components/user-profile"
 import AuthModal from "./components/auth-modal"
 import { AuthProvider, useAuth } from "./components/auth-provider"
 import { useUserStorage } from "./hooks/use-user-storage"
+import ViligantLogo from "./components/viligant-logo"
 
 interface DailyStats {
   caloriesConsumed: number
@@ -107,10 +108,10 @@ function FitnessAppContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-secondary/20">
         <div className="text-center">
-          <div className="mx-auto mb-4 p-3 bg-primary/10 rounded-full w-fit animate-pulse">
-            <Activity className="h-8 w-8 text-primary" />
+          <div className="flex justify-center mb-6 animate-pulse">
+            <ViligantLogo size={120} />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Loading FitTracker...</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Loading Viligant Fitness Tracker...</h1>
         </div>
       </div>
     )
@@ -145,9 +146,9 @@ function FitnessAppContent() {
       {/* Welcome Message */}
       <Card className="card-hover bg-gradient-to-br from-card to-card/50 border-border/50 backdrop-blur-sm">
         <CardContent className="p-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-xl">
-              <Activity className="h-6 w-6 text-primary" />
+          <div className="flex flex-col items-center text-center gap-4 md:flex-row md:text-left">
+            <div className="flex justify-center">
+              <ViligantLogo size={80} />
             </div>
             <div>
               <h2 className="text-xl font-semibold">Welcome back, {user.name}!</h2>
@@ -295,11 +296,11 @@ function FitnessAppContent() {
         <div className="px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-2 bg-primary/10 rounded-xl border border-primary/20">
-                <Activity className="h-7 w-7 text-primary" />
+              <div className="flex justify-center">
+                <ViligantLogo size={56} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold tracking-tight">FitTracker</h1>
+                <h1 className="text-2xl font-bold tracking-tight">Viligant Fitness Tracker</h1>
                 <p className="text-sm text-muted-foreground">Welcome, {user.name}</p>
               </div>
             </div>
