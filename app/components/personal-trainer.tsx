@@ -21,7 +21,6 @@ import {
   Clock,
   TrendingUp,
   BarChart3,
-  Award,
   Play,
   Plus,
   X,
@@ -966,112 +965,136 @@ export default function PersonalTrainer({ weightGoal }: PersonalTrainerProps) {
         <CardContent>
           {personalPlan && (
             <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid grid-cols-5 mb-6">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="workouts">Workouts</TabsTrigger>
-                <TabsTrigger value="progress">Progress</TabsTrigger>
-                <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
-                <TabsTrigger value="timeline">Timeline</TabsTrigger>
+              <TabsList className="grid grid-cols-3 mb-4 h-auto p-1">
+                <TabsTrigger value="overview" className="text-xs py-2">
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger value="workouts" className="text-xs py-2">
+                  Workouts
+                </TabsTrigger>
+                <TabsTrigger value="progress" className="text-xs py-2">
+                  Progress
+                </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="overview" className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                  <div className="p-4 bg-secondary/30 rounded-xl text-center">
-                    <Target className="h-6 w-6 text-primary mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-primary">{personalPlan.dailyCalories}</div>
-                    <div className="text-sm text-muted-foreground">Daily Calories</div>
+              {/* Secondary tabs for nutrition and timeline */}
+              <div className="flex gap-2 mb-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => document.querySelector('[value="nutrition"]')?.click()}
+                  className="flex-1 text-xs"
+                >
+                  Nutrition
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => document.querySelector('[value="timeline"]')?.click()}
+                  className="flex-1 text-xs"
+                >
+                  Timeline
+                </Button>
+              </div>
+
+              <TabsContent value="overview" className="space-y-4 mt-0">
+                {/* Compact stats grid */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 bg-secondary/30 rounded-lg text-center">
+                    <Target className="h-5 w-5 text-primary mx-auto mb-1" />
+                    <div className="text-lg font-bold text-primary">{personalPlan.dailyCalories}</div>
+                    <div className="text-xs text-muted-foreground">Daily Calories</div>
                   </div>
 
-                  <div className="p-4 bg-secondary/30 rounded-xl text-center">
-                    <Zap className="h-6 w-6 text-red-500 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-red-500">{personalPlan.dailyCaloriesToBurn}</div>
-                    <div className="text-sm text-muted-foreground">Calories to Burn</div>
+                  <div className="p-3 bg-secondary/30 rounded-lg text-center">
+                    <Zap className="h-5 w-5 text-red-500 mx-auto mb-1" />
+                    <div className="text-lg font-bold text-red-500">{personalPlan.dailyCaloriesToBurn}</div>
+                    <div className="text-xs text-muted-foreground">To Burn</div>
                   </div>
 
-                  <div className="p-4 bg-secondary/30 rounded-xl text-center">
-                    <Dumbbell className="h-6 w-6 text-blue-500 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-blue-500">{personalPlan.weeklyWorkouts}</div>
-                    <div className="text-sm text-muted-foreground">Workouts/Week</div>
+                  <div className="p-3 bg-secondary/30 rounded-lg text-center">
+                    <Dumbbell className="h-5 w-5 text-blue-500 mx-auto mb-1" />
+                    <div className="text-lg font-bold text-blue-500">{personalPlan.weeklyWorkouts}</div>
+                    <div className="text-xs text-muted-foreground">Workouts/Week</div>
                   </div>
 
-                  <div className="p-4 bg-secondary/30 rounded-xl text-center">
-                    <Calendar className="h-6 w-6 text-green-500 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-green-500">{personalPlan.timeline.weeksToGoal}</div>
-                    <div className="text-sm text-muted-foreground">Weeks to Goal</div>
+                  <div className="p-3 bg-secondary/30 rounded-lg text-center">
+                    <Calendar className="h-5 w-5 text-green-500 mx-auto mb-1" />
+                    <div className="text-lg font-bold text-green-500">{personalPlan.timeline.weeksToGoal}</div>
+                    <div className="text-xs text-muted-foreground">Weeks Left</div>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <h3 className="font-semibold">Your Recommendations:</h3>
-                  {personalPlan.recommendations.map((rec, index) => (
-                    <div key={index} className="flex items-start gap-2 p-3 bg-secondary/30 rounded-xl">
-                      <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">{rec}</span>
-                    </div>
-                  ))}
+                {/* Compact recommendations */}
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-sm">Key Recommendations:</h3>
+                  <div className="space-y-2">
+                    {personalPlan.recommendations.slice(0, 3).map((rec, index) => (
+                      <div key={index} className="flex items-start gap-2 p-2 bg-secondary/20 rounded-lg">
+                        <CheckCircle className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
+                        <span className="text-xs leading-relaxed">{rec}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </TabsContent>
 
-              <TabsContent value="workouts" className="space-y-4">
-                <ScrollArea className="h-[600px] pr-4">
-                  <div className="space-y-4">
+              <TabsContent value="workouts" className="space-y-3 mt-0">
+                <ScrollArea className="h-[500px] pr-2">
+                  <div className="space-y-3">
                     {personalPlan.workoutPlan.map((day, index) => (
                       <Card key={index} className="bg-secondary/20">
-                        <CardHeader className="pb-3">
+                        <CardHeader className="pb-2 pt-3 px-3">
                           <div className="flex items-center justify-between">
-                            <div>
-                              <CardTitle className="text-lg">{day.day}</CardTitle>
-                              {(() => {
-                                const lastDone = getLastWorkoutDate(day.day, day.type)
-                                return (
-                                  lastDone && (
-                                    <div className="text-sm text-muted-foreground mt-1">Recently done: {lastDone}</div>
-                                  )
-                                )
-                              })()}
+                            <div className="flex-1">
+                              <CardTitle className="text-base">{day.day}</CardTitle>
+                              <div className="flex items-center gap-2 mt-1">
+                                <Badge variant={day.type === "rest" ? "outline" : "default"} className="text-xs">
+                                  {day.type === "strength" ? "Strength" : day.type === "cardio" ? "Cardio" : "Rest"}
+                                </Badge>
+                                <Badge
+                                  variant="outline"
+                                  className="bg-red-500/10 text-red-500 border-red-500/20 text-xs"
+                                >
+                                  {day.caloriesBurned} kcal
+                                </Badge>
+                              </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Badge variant={day.type === "rest" ? "outline" : "default"}>
-                                {day.type === "strength" ? "Strength" : day.type === "cardio" ? "Cardio" : "Rest"}
-                              </Badge>
-                              <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20">
-                                {day.caloriesBurned} kcal
-                              </Badge>
-                              {day.type !== "rest" && (
-                                <Button size="sm" onClick={() => startWorkout(day)}>
-                                  <Play className="h-4 w-4 mr-1" />
-                                  Start
-                                </Button>
-                              )}
-                            </div>
+                            {day.type !== "rest" && (
+                              <Button size="sm" onClick={() => startWorkout(day)} className="ml-2">
+                                <Play className="h-3 w-3 mr-1" />
+                                Start
+                              </Button>
+                            )}
                           </div>
-                          <CardDescription>
-                            <Clock className="h-4 w-4 inline mr-1" />
-                            {day.totalDuration} minutes
-                          </CardDescription>
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            {day.totalDuration} min
+                          </div>
                         </CardHeader>
-                        <CardContent className="space-y-3">
-                          {day.exercises.map((exercise, exerciseIndex) => (
-                            <div key={exerciseIndex} className="p-3 bg-secondary/30 rounded-lg">
-                              <div className="flex items-center justify-between mb-2">
-                                <h4 className="font-medium">{exercise.name}</h4>
+                        <CardContent className="px-3 pb-3 space-y-2">
+                          {day.exercises.slice(0, 3).map((exercise, exerciseIndex) => (
+                            <div key={exerciseIndex} className="p-2 bg-secondary/30 rounded text-xs">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="font-medium">{exercise.name}</span>
                                 {exercise.sets && (
-                                  <Badge variant="outline" className="text-xs">
-                                    {exercise.sets} sets × {exercise.reps}
+                                  <Badge variant="outline" className="text-xs h-5">
+                                    {exercise.sets}×{exercise.reps}
                                   </Badge>
                                 )}
                                 {exercise.duration && (
-                                  <Badge variant="outline" className="text-xs">
-                                    {exercise.duration} min
+                                  <Badge variant="outline" className="text-xs h-5">
+                                    {exercise.duration}min
                                   </Badge>
                                 )}
                               </div>
-                              <p className="text-sm text-muted-foreground">{exercise.instructions}</p>
-                              {exercise.rest && (
-                                <p className="text-xs text-muted-foreground mt-1">Rest: {exercise.rest}</p>
-                              )}
                             </div>
                           ))}
+                          {day.exercises.length > 3 && (
+                            <div className="text-xs text-muted-foreground text-center">
+                              +{day.exercises.length - 3} more exercises
+                            </div>
+                          )}
                         </CardContent>
                       </Card>
                     ))}
@@ -1079,164 +1102,87 @@ export default function PersonalTrainer({ weightGoal }: PersonalTrainerProps) {
                 </ScrollArea>
               </TabsContent>
 
-              <TabsContent value="progress" className="space-y-6">
-                {/* Weekly and Monthly Stats */}
-                <div className="grid gap-4 md:grid-cols-2">
+              <TabsContent value="progress" className="space-y-4 mt-0">
+                {/* Compact weekly/monthly toggle */}
+                <div className="grid grid-cols-2 gap-2">
                   <Card className="bg-secondary/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <BarChart3 className="h-5 w-5" />
-                        Weekly Progress
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="text-center p-3 bg-secondary/30 rounded-xl">
-                          <div className="text-2xl font-bold text-blue-500">{progressionData.weekly.totalWorkouts}</div>
-                          <div className="text-sm text-muted-foreground">Workouts</div>
-                        </div>
-                        <div className="text-center p-3 bg-secondary/30 rounded-xl">
-                          <div className="text-2xl font-bold text-green-500">
-                            {progressionData.weekly.totalDuration}
+                    <CardContent className="p-3">
+                      <div className="text-center">
+                        <BarChart3 className="h-4 w-4 mx-auto mb-1 text-blue-500" />
+                        <div className="text-sm font-semibold">This Week</div>
+                        <div className="grid grid-cols-2 gap-2 mt-2 text-xs">
+                          <div>
+                            <div className="font-bold text-blue-500">{progressionData.weekly.totalWorkouts}</div>
+                            <div className="text-muted-foreground">Workouts</div>
                           </div>
-                          <div className="text-sm text-muted-foreground">Minutes</div>
-                        </div>
-                        <div className="text-center p-3 bg-secondary/30 rounded-xl">
-                          <div className="text-2xl font-bold text-red-500">
-                            {progressionData.weekly.totalCaloriesBurned}
+                          <div>
+                            <div className="font-bold text-red-500">{progressionData.weekly.totalCaloriesBurned}</div>
+                            <div className="text-muted-foreground">Calories</div>
                           </div>
-                          <div className="text-sm text-muted-foreground">Calories</div>
                         </div>
-                        <div className="text-center p-3 bg-secondary/30 rounded-xl">
-                          <div className="text-2xl font-bold text-orange-500">
-                            {progressionData.weekly.averageDuration}
-                          </div>
-                          <div className="text-sm text-muted-foreground">Avg/Workout</div>
-                        </div>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span>Strength: {progressionData.weekly.strengthWorkouts}</span>
-                        <span>Cardio: {progressionData.weekly.cardioWorkouts}</span>
                       </div>
                     </CardContent>
                   </Card>
 
                   <Card className="bg-secondary/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <TrendingUp className="h-5 w-5" />
-                        Monthly Progress
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="text-center p-3 bg-secondary/30 rounded-xl">
-                          <div className="text-2xl font-bold text-blue-500">
-                            {progressionData.monthly.totalWorkouts}
+                    <CardContent className="p-3">
+                      <div className="text-center">
+                        <TrendingUp className="h-4 w-4 mx-auto mb-1 text-green-500" />
+                        <div className="text-sm font-semibold">This Month</div>
+                        <div className="grid grid-cols-2 gap-2 mt-2 text-xs">
+                          <div>
+                            <div className="font-bold text-blue-500">{progressionData.monthly.totalWorkouts}</div>
+                            <div className="text-muted-foreground">Workouts</div>
                           </div>
-                          <div className="text-sm text-muted-foreground">Workouts</div>
-                        </div>
-                        <div className="text-center p-3 bg-secondary/30 rounded-xl">
-                          <div className="text-2xl font-bold text-green-500">
-                            {Math.round(progressionData.monthly.totalDuration / 60)}
+                          <div>
+                            <div className="font-bold text-red-500">{progressionData.monthly.totalCaloriesBurned}</div>
+                            <div className="text-muted-foreground">Calories</div>
                           </div>
-                          <div className="text-sm text-muted-foreground">Hours</div>
                         </div>
-                        <div className="text-center p-3 bg-secondary/30 rounded-xl">
-                          <div className="text-2xl font-bold text-red-500">
-                            {progressionData.monthly.totalCaloriesBurned}
-                          </div>
-                          <div className="text-sm text-muted-foreground">Calories</div>
-                        </div>
-                        <div className="text-center p-3 bg-secondary/30 rounded-xl">
-                          <div className="text-2xl font-bold text-orange-500">
-                            {progressionData.monthly.averageDuration}
-                          </div>
-                          <div className="text-sm text-muted-foreground">Avg/Workout</div>
-                        </div>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span>Strength: {progressionData.monthly.strengthWorkouts}</span>
-                        <span>Cardio: {progressionData.monthly.cardioWorkouts}</span>
                       </div>
                     </CardContent>
                   </Card>
                 </div>
 
-                {/* Weekly Progression Table */}
+                {/* Recent workouts - mobile optimized */}
                 <Card className="bg-secondary/20">
-                  <CardHeader>
-                    <CardTitle>4-Week Progression</CardTitle>
-                    <CardDescription>Your workout consistency over the past month</CardDescription>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">Recent Workouts</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {progressionData.weeklyProgression.map((week, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg">
-                          <span className="font-medium">{week.week}</span>
-                          <div className="flex items-center gap-4 text-sm">
-                            <Badge variant="outline" className="bg-blue-500/10 text-blue-400 border-blue-500/20">
-                              {week.workouts} workouts
-                            </Badge>
-                            <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500/20">
-                              {week.duration} min
-                            </Badge>
-                            <Badge variant="outline" className="bg-red-500/10 text-red-400 border-red-500/20">
-                              {week.calories} kcal
-                            </Badge>
-                            <span className="text-muted-foreground">
-                              S:{week.strength} C:{week.cardio}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Recent Workouts Log */}
-                <Card className="bg-secondary/20">
-                  <CardHeader>
-                    <CardTitle>Recent Workouts</CardTitle>
-                    <CardDescription>Your latest completed workouts</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ScrollArea className="h-[300px] pr-4">
+                  <CardContent className="px-3 pb-3">
+                    <ScrollArea className="h-[200px]">
                       {progressionData.recentWorkouts.length > 0 ? (
                         <div className="space-y-2">
-                          {progressionData.recentWorkouts.map((workout, index) => (
+                          {progressionData.recentWorkouts.slice(0, 5).map((workout, index) => (
                             <div
                               key={index}
-                              className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg"
+                              className="flex items-center justify-between p-2 bg-secondary/30 rounded text-xs"
                             >
-                              <div>
+                              <div className="flex-1">
                                 <div className="flex items-center gap-2">
                                   <span className="font-medium">{workout.dayOfWeek}</span>
-                                  <Badge variant={workout.workoutType === "strength" ? "default" : "outline"}>
+                                  <Badge
+                                    variant={workout.workoutType === "strength" ? "default" : "outline"}
+                                    className="text-xs h-4"
+                                  >
                                     {workout.workoutType}
                                   </Badge>
                                 </div>
-                                <div className="text-sm text-muted-foreground">
-                                  {new Date(workout.date).toLocaleDateString()} • {workout.totalDuration} min
+                                <div className="text-muted-foreground">
+                                  {new Date(workout.date).toLocaleDateString()}
                                 </div>
-                                {workout.notes && (
-                                  <div className="text-xs text-muted-foreground mt-1">{workout.notes}</div>
-                                )}
                               </div>
-                              <div className="flex items-center gap-2">
-                                <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20">
-                                  {workout.caloriesBurned} kcal
-                                </Badge>
-                                <Award className="h-4 w-4 text-primary" />
+                              <div className="text-right">
+                                <div className="font-bold text-red-500">{workout.caloriesBurned}</div>
+                                <div className="text-muted-foreground">kcal</div>
                               </div>
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <div className="text-center py-8 text-muted-foreground">
-                          <Dumbbell className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                          <p>No workouts completed yet</p>
-                          <p className="text-sm">Start your first workout to see progress here!</p>
+                        <div className="text-center py-4 text-muted-foreground">
+                          <Dumbbell className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                          <p className="text-xs">No workouts yet</p>
                         </div>
                       )}
                     </ScrollArea>
@@ -1244,89 +1190,67 @@ export default function PersonalTrainer({ weightGoal }: PersonalTrainerProps) {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="nutrition" className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-3 mb-6">
-                  <div className="p-4 bg-secondary/30 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-blue-500">{personalPlan.nutritionPlan.macros.protein}g</div>
-                    <div className="text-sm text-muted-foreground">Protein (30%)</div>
+              <TabsContent value="nutrition" className="space-y-4 mt-0">
+                {/* Compact macro display */}
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="p-2 bg-secondary/30 rounded text-center">
+                    <div className="text-lg font-bold text-blue-500">{personalPlan.nutritionPlan.macros.protein}g</div>
+                    <div className="text-xs text-muted-foreground">Protein</div>
                   </div>
-
-                  <div className="p-4 bg-secondary/30 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-green-500">{personalPlan.nutritionPlan.macros.carbs}g</div>
-                    <div className="text-sm text-muted-foreground">Carbs (40%)</div>
+                  <div className="p-2 bg-secondary/30 rounded text-center">
+                    <div className="text-lg font-bold text-green-500">{personalPlan.nutritionPlan.macros.carbs}g</div>
+                    <div className="text-xs text-muted-foreground">Carbs</div>
                   </div>
-
-                  <div className="p-4 bg-secondary/30 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-orange-500">{personalPlan.nutritionPlan.macros.fats}g</div>
-                    <div className="text-sm text-muted-foreground">Fats (30%)</div>
+                  <div className="p-2 bg-secondary/30 rounded text-center">
+                    <div className="text-lg font-bold text-orange-500">{personalPlan.nutritionPlan.macros.fats}g</div>
+                    <div className="text-xs text-muted-foreground">Fats</div>
                   </div>
                 </div>
 
-                <ScrollArea className="h-[500px] pr-4">
-                  <div className="space-y-4">
+                {/* Simplified meal plan */}
+                <ScrollArea className="h-[400px]">
+                  <div className="space-y-3">
                     {personalPlan.nutritionPlan.meals.map((meal, index) => (
                       <Card key={index} className="bg-secondary/20">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <CardTitle className="text-lg">{meal.name}</CardTitle>
+                        <CardContent className="p-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-medium text-sm">{meal.name}</h4>
                             <div className="flex items-center gap-2">
                               <Badge
                                 variant="outline"
-                                className="bg-orange-500/10 text-orange-500 border-orange-500/20"
+                                className="bg-orange-500/10 text-orange-500 border-orange-500/20 text-xs"
                               >
                                 {meal.calories} kcal
                               </Badge>
-                              <span className="text-sm text-muted-foreground">{meal.time}</span>
+                              <span className="text-xs text-muted-foreground">{meal.time}</span>
                             </div>
                           </div>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          {meal.foods.map((food, foodIndex) => (
-                            <div
-                              key={foodIndex}
-                              className="flex items-center justify-between p-2 bg-secondary/30 rounded"
-                            >
-                              <div>
-                                <span className="font-medium text-sm">{food.item}</span>
-                                <span className="text-xs text-muted-foreground ml-2">({food.amount})</span>
+                          <div className="space-y-1">
+                            {meal.foods.slice(0, 2).map((food, foodIndex) => (
+                              <div key={foodIndex} className="flex justify-between text-xs">
+                                <span>{food.item}</span>
+                                <span className="text-muted-foreground">{food.calories} kcal</span>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs bg-blue-500/10 text-blue-400 border-blue-500/20"
-                                >
-                                  P: {food.protein}g
-                                </Badge>
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs bg-green-500/10 text-green-400 border-green-500/20"
-                                >
-                                  C: {food.carbs}g
-                                </Badge>
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
-                                >
-                                  F: {food.fat}g
-                                </Badge>
-                                <span className="text-xs font-medium">{food.calories} kcal</span>
-                              </div>
-                            </div>
-                          ))}
+                            ))}
+                            {meal.foods.length > 2 && (
+                              <div className="text-xs text-muted-foreground">+{meal.foods.length - 2} more items</div>
+                            )}
+                          </div>
                         </CardContent>
                       </Card>
                     ))}
                   </div>
                 </ScrollArea>
 
+                {/* Water intake */}
                 <Card className="bg-blue-500/10 border-blue-500/20">
-                  <CardContent className="p-4">
+                  <CardContent className="p-3">
                     <div className="flex items-center gap-2">
-                      <div className="text-2xl">💧</div>
+                      <div className="text-lg">💧</div>
                       <div>
-                        <div className="font-medium">Daily Water Intake</div>
-                        <div className="text-sm text-muted-foreground">
-                          Drink {personalPlan.nutritionPlan.waterIntake}L of water throughout the day
+                        <div className="font-medium text-sm">Daily Water</div>
+                        <div className="text-xs text-muted-foreground">
+                          {personalPlan.nutritionPlan.waterIntake}L per day
                         </div>
                       </div>
                     </div>
@@ -1334,50 +1258,45 @@ export default function PersonalTrainer({ weightGoal }: PersonalTrainerProps) {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="timeline" className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="p-4 bg-secondary/30 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-primary">{userProfile?.currentWeight}kg</div>
-                    <div className="text-sm text-muted-foreground">Current Weight</div>
+              <TabsContent value="timeline" className="space-y-4 mt-0">
+                {/* Compact timeline stats */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 bg-secondary/30 rounded text-center">
+                    <div className="text-lg font-bold text-primary">{userProfile?.currentWeight}kg</div>
+                    <div className="text-xs text-muted-foreground">Current</div>
                   </div>
-
-                  <div className="p-4 bg-secondary/30 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-green-500">{userProfile?.goalWeight}kg</div>
-                    <div className="text-sm text-muted-foreground">Goal Weight</div>
-                  </div>
-
-                  <div className="p-4 bg-secondary/30 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-blue-500">
-                      {Math.abs(personalPlan.timeline.weeklyWeightChange).toFixed(1)}kg
-                    </div>
-                    <div className="text-sm text-muted-foreground">Per Week</div>
+                  <div className="p-3 bg-secondary/30 rounded text-center">
+                    <div className="text-lg font-bold text-green-500">{userProfile?.goalWeight}kg</div>
+                    <div className="text-xs text-muted-foreground">Goal</div>
                   </div>
                 </div>
 
+                {/* Progress info */}
                 <Card className="bg-secondary/20">
-                  <CardHeader>
-                    <CardTitle>Progress Timeline</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex justify-between items-center">
+                  <CardContent className="p-3 space-y-3">
+                    <div className="flex justify-between items-center text-sm">
                       <span>Target Date:</span>
-                      <Badge variant="outline">{personalPlan.timeline.estimatedCompletion}</Badge>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Weeks Remaining:</span>
-                      <Badge variant="outline">{personalPlan.timeline.weeksToGoal} weeks</Badge>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Total Weight Change:</span>
-                      <Badge variant="outline">
-                        {Math.abs((userProfile?.goalWeight || 0) - (userProfile?.currentWeight || 0)).toFixed(1)}kg
+                      <Badge variant="outline" className="text-xs">
+                        {personalPlan.timeline.estimatedCompletion}
                       </Badge>
                     </div>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center text-sm">
+                      <span>Weeks Left:</span>
+                      <Badge variant="outline" className="text-xs">
+                        {personalPlan.timeline.weeksToGoal} weeks
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
                       <span>Weekly Target:</span>
-                      <Badge variant="outline">
+                      <Badge variant="outline" className="text-xs">
                         {personalPlan.timeline.weeklyWeightChange > 0 ? "+" : ""}
                         {personalPlan.timeline.weeklyWeightChange.toFixed(1)}kg/week
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span>Total Change:</span>
+                      <Badge variant="outline" className="text-xs">
+                        {Math.abs((userProfile?.goalWeight || 0) - (userProfile?.currentWeight || 0)).toFixed(1)}kg
                       </Badge>
                     </div>
                   </CardContent>

@@ -24,6 +24,7 @@ import { useUserStorage } from "../hooks/use-user-storage"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import BarcodeScanner from "./barcode-scanner"
+import SubscriptionPage from "./subscription-page"
 
 interface FoodItem {
   id: string
@@ -1790,6 +1791,7 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
   const [historySearchTerm, setHistorySearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("add")
   const [isSearching, setIsSearching] = useState(false)
+  const [showSubscriptionPage, setShowSubscriptionPage] = useState(false)
   const [customFoodForm, setCustomFoodForm] = useState({
     name: "",
     calories: "",
@@ -2138,6 +2140,11 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
       carbs: Math.round(foodData.carbs * multiplier * 10) / 10,
       fat: Math.round(foodData.fat * multiplier * 10) / 10,
     }
+  }
+
+  // Show subscription page if requested
+  if (showSubscriptionPage) {
+    return <SubscriptionPage onBack={() => setShowSubscriptionPage(false)} />
   }
 
   return (
@@ -2541,6 +2548,18 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
         </Card>
       </div>
 
+      {todaysFoods.length > 0 && (
+        <Card className="card-hover border-border/50 bg-card/50 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Utensils className="h-5 w-5" />
+              Today's Food Summary
+            </CardTitle>
+            <CardDescription>Foods and macros consumed today</CardDescription>
+          </CardHeader>
+        </Card>
+      )}
+
       {/* Weekly and Monthly Breakdowns - Premium Feature */}
       <div className="grid gap-4 md:grid-cols-2">
         <Card className="card-hover border-border/50 bg-card/50 backdrop-blur-sm relative">
@@ -2554,7 +2573,7 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
                   <h3 className="font-semibold text-lg">Premium Feature</h3>
                   <p className="text-sm text-muted-foreground">Unlock weekly breakdowns with premium</p>
                 </div>
-                <Button size="sm" className="btn-primary">
+                <Button size="sm" className="btn-primary" onClick={() => setShowSubscriptionPage(true)}>
                   <Crown className="h-4 w-4 mr-2" />
                   Upgrade Now
                 </Button>
@@ -2569,7 +2588,7 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
             </CardTitle>
             <CardDescription>Last 7 days calorie intake</CardDescription>
           </CardHeader>
-          <CardContent className={`space-y-4 ${!isSubscribed ? "opacity-30" : ""}`}>
+          <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-3 bg-secondary/30 rounded-xl">
                 <div className="text-2xl font-bold text-blue-500">{isSubscribed ? weeklyBreakdown.total : "****"}</div>
@@ -2643,7 +2662,7 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
                   <h3 className="font-semibold text-lg">Premium Feature</h3>
                   <p className="text-sm text-muted-foreground">Unlock monthly analytics with premium</p>
                 </div>
-                <Button size="sm" className="btn-primary">
+                <Button size="sm" className="btn-primary" onClick={() => setShowSubscriptionPage(true)}>
                   <Crown className="h-4 w-4 mr-2" />
                   Upgrade Now
                 </Button>
@@ -2658,7 +2677,7 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
             </CardTitle>
             <CardDescription>Last 30 days calorie intake</CardDescription>
           </CardHeader>
-          <CardContent className={`space-y-4 ${!isSubscribed ? "opacity-30" : ""}`}>
+          <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-3 bg-secondary/30 rounded-xl">
                 <div className="text-2xl font-bold text-purple-500">
@@ -2681,15 +2700,9 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
                   {monthlyBreakdown.weeklyAverages.map((week) => (
                     <div key={week.week} className="flex items-center justify-between p-2 bg-secondary/20 rounded-lg">
                       <span className="text-sm font-medium">Week {week.week}</span>
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          variant="outline"
-                          className="bg-purple-500/10 text-purple-400 border-purple-500/20 text-xs"
-                        >
-                          {week.average} kcal/day
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">({week.days} days)</span>
-                      </div>
+                      <Badge variant="outline" className="bg-orange-500/10 text-orange-400 border-orange-500/20">
+                        {week.average} kcal
+                      </Badge>
                     </div>
                   ))}
                 </div>
@@ -2703,15 +2716,49 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
                   {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="flex items-center justify-between p-2 bg-secondary/20 rounded-lg">
                       <span className="text-sm font-medium">Week {i}</span>
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          variant="outline"
-                          className="bg-purple-500/10 text-purple-400 border-purple-500/20 text-xs"
-                        >
-                          **** kcal/day
+                      <Badge variant="outline" className="bg-orange-500/10 text-orange-400 border-orange-500/20">
+                        **** kcal
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {isSubscribed && monthlyBreakdown.dailyTotals.length > 0 && (
+              <div className="space-y-2">
+                <Label className="text-sm text-muted-foreground">Daily Breakdown:</Label>
+                <ScrollArea className="h-[150px] pr-4">
+                  <div className="space-y-1">
+                    {monthlyBreakdown.dailyTotals.slice(0, 7).map(([date, calories]) => (
+                      <div key={date} className="flex items-center justify-between p-2 bg-secondary/20 rounded-lg">
+                        <span className="text-sm font-medium">
+                          {new Date(date).toLocaleDateString("en-US", {
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </span>
+                        <Badge variant="outline" className="bg-purple-500/10 text-purple-400 border-purple-500/20">
+                          {calories} kcal
                         </Badge>
-                        <span className="text-xs text-muted-foreground">(* days)</span>
                       </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </div>
+            )}
+
+            {!isSubscribed && (
+              <div className="space-y-2">
+                <Label className="text-sm text-muted-foreground">Daily Breakdown:</Label>
+                <div className="space-y-1">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="flex items-center justify-between p-2 bg-secondary/20 rounded-lg">
+                      <span className="text-sm font-medium">*** **</span>
+                      <Badge variant="outline" className="bg-purple-500/10 text-purple-400 border-purple-500/20">
+                        **** kcal
+                      </Badge>
                     </div>
                   ))}
                 </div>
@@ -2720,7 +2767,7 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
 
             {isSubscribed && monthlyBreakdown.days === 0 && (
               <div className="text-center py-4 text-muted-foreground">
-                <BarChart3 className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <TrendingUp className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">No data for the past month</p>
               </div>
             )}
@@ -2728,58 +2775,8 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
         </Card>
       </div>
 
-      {todaysFoods.length > 0 && (
-        <Card className="card-hover border-border/50 bg-card/50 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Today's Food Log</CardTitle>
-            <CardDescription>Foods you've eaten today</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {todaysFoods.map((food) => (
-                <div
-                  key={food.id}
-                  className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl border border-border/30"
-                >
-                  <div>
-                    <span className="font-medium text-foreground">{food.name}</span>
-                    <span className="text-sm text-muted-foreground ml-2">
-                      {food.quantity} {food.unit}
-                    </span>
-                    <div className="flex gap-2 mt-1">
-                      <Badge variant="outline" className="bg-blue-500/10 text-blue-400 border-blue-500/20 text-xs">
-                        P: {Math.round(food.protein || 0)}g
-                      </Badge>
-                      <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500/20 text-xs">
-                        C: {Math.round(food.carbs || 0)}g
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20 text-xs"
-                      >
-                        F: {Math.round(food.fat || 0)}g
-                      </Badge>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="bg-orange-500/10 text-orange-500 border-orange-500/20">
-                      {food.calories} kcal
-                    </Badge>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeFood(food.id)}
-                      className="hover:bg-destructive/10 hover:text-destructive"
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Show subscription page if requested */}
+      {showSubscriptionPage && <SubscriptionPage onBack={() => setShowSubscriptionPage(false)} />}
     </div>
   )
 }

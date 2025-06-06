@@ -354,8 +354,8 @@ function FitnessAppContent() {
               </Button>
             ) : (
               <div className="flex items-center gap-2">
-                <ViligantLogo size={32} />
-                <h1 className="text-lg font-bold">Viligant</h1>
+                <ViligantLogo size={48} />
+                <h1 className="text-2xl font-bold">Viligant</h1>
               </div>
             )}
 
