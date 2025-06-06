@@ -2556,12 +2556,12 @@ export default function CalorieTracker({ dailyStats, onCaloriesUpdate, onMacrosU
               Today's Food Summary
             </CardTitle>
             <CardDescription>Foods and macros consumed today</CardDescription>
-          </CardHeader>
-        </Card>
+          </Card>
       )}
 
       {/* Weekly and Monthly Breakdowns - Premium Feature */}
       <div className="grid gap-4 md:grid-cols-2">
+        
         <Card className="card-hover border-border/50 bg-card/50 backdrop-blur-sm relative">
           {!isSubscribed && (
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm rounded-lg flex items-center justify-center z-10">

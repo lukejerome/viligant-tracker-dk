@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, User, Mail, Lock } from "lucide-react"
 import { useAuth } from "./auth-provider"
-import ViligantLogo from "./viligant-logo"
+import VigilantLogo from "./vigilant-logo"
 
 export default function AuthModal() {
   const { login, signup, isLoading } = useAuth()
@@ -88,9 +88,9 @@ export default function AuthModal() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
-            <ViligantLogo size={128} />
+            <VigilantLogo size={128} />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">Viligant Fitness Tracker</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Vigilant Fitness Tracker</h1>
           <p className="text-muted-foreground mt-2">Your personal fitness journey starts here</p>
         </div>
 

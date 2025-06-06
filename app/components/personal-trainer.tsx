@@ -26,6 +26,7 @@ import {
   X,
 } from "lucide-react"
 import { useLocalStorage } from "../hooks/use-local-storage"
+import SubscriptionPage from "./subscription-page"
 
 interface UserProfile {
   height: number // cm
@@ -126,6 +127,7 @@ export default function PersonalTrainer({ weightGoal }: PersonalTrainerProps) {
   const [personalPlan, setPersonalPlan] = useState<PersonalPlan | null>(null)
   const [showProfileForm, setShowProfileForm] = useState(false)
   const [activeWorkout, setActiveWorkout] = useState<WorkoutLog | null>(null)
+  const [showSubscriptionPage, setShowSubscriptionPage] = useState(false)
 
   const [profileForm, setProfileForm] = useState({
     height: "",
@@ -747,7 +749,7 @@ export default function PersonalTrainer({ weightGoal }: PersonalTrainerProps) {
                 <div className="text-3xl font-bold text-primary">$4.99</div>
                 <div className="text-sm text-muted-foreground">per month</div>
               </div>
-              <Button onClick={handleSubscribe} size="lg" className="w-full">
+              <Button onClick={() => setShowSubscriptionPage(true)} size="lg" className="w-full">
                 <Crown className="h-4 w-4 mr-2" />
                 Start Your Personal Training Journey
               </Button>
@@ -785,6 +787,10 @@ export default function PersonalTrainer({ weightGoal }: PersonalTrainerProps) {
         </Card>
       </div>
     )
+  }
+
+  if (showSubscriptionPage) {
+    return <SubscriptionPage onBack={() => setShowSubscriptionPage(false)} />
   }
 
   if (showProfileForm || !userProfile) {

@@ -27,7 +27,8 @@ import UserProfile from "./components/user-profile"
 import AuthModal from "./components/auth-modal"
 import { AuthProvider, useAuth } from "./components/auth-provider"
 import { useUserStorage } from "./hooks/use-user-storage"
-import ViligantLogo from "./components/viligant-logo"
+import VigilantLogo from "./components/vigilant-logo"
+import SubscriptionPage from "./components/subscription-page"
 
 interface DailyStats {
   caloriesConsumed: number
@@ -80,6 +81,7 @@ function FitnessAppContent() {
   })
 
   const [isSubscribed] = useUserStorage<boolean>("ptSubscription", false)
+  const [showSubscriptionPage, setShowSubscriptionPage] = useState(false)
 
   // Reset daily stats if it's a new day
   useEffect(() => {
@@ -108,7 +110,7 @@ function FitnessAppContent() {
       <div className="min-h-screen flex items-center justify-center bg-[#222222]">
         <div className="text-center">
           <div className="flex justify-center mb-6 animate-pulse">
-            <ViligantLogo size={100} />
+            <VigilantLogo size={100} />
           </div>
           <h1 className="text-xl font-bold tracking-tight">Loading...</h1>
         </div>
@@ -249,7 +251,7 @@ function FitnessAppContent() {
           <Button
             variant="outline"
             className="w-full h-16 justify-start px-4 border-border/30 bg-card/80 backdrop-blur-sm hover:bg-card/90 transition-colors"
-            onClick={() => setActiveTab(isSubscribed ? "goals" : "trainer")}
+            onClick={() => (isSubscribed ? setActiveTab("goals") : setShowSubscriptionPage(true))}
           >
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-3">
@@ -295,7 +297,7 @@ function FitnessAppContent() {
                     <p className="text-xs text-muted-foreground">Unlock all features</p>
                   </div>
                 </div>
-                <Button onClick={() => setActiveTab("trainer")} className="bg-primary hover:bg-primary/90">
+                <Button onClick={() => setShowSubscriptionPage(true)} className="bg-primary hover:bg-primary/90">
                   Upgrade
                 </Button>
               </div>
@@ -354,8 +356,8 @@ function FitnessAppContent() {
               </Button>
             ) : (
               <div className="flex items-center gap-2">
-                <ViligantLogo size={48} />
-                <h1 className="text-2xl font-bold">Viligant</h1>
+                <VigilantLogo size={48} />
+                <h1 className="text-2xl font-bold">Vigilant</h1>
               </div>
             )}
 
@@ -368,8 +370,13 @@ function FitnessAppContent() {
 
       {/* Main Content with better padding for mobile */}
       <div className="px-4 py-4 pb-24">
-        {activeTab === "dashboard" && renderDashboard()}
-        {activeTab === "workouts" && (
+        {showSubscriptionPage && (
+          <div className="animate-fade-in">
+            <SubscriptionPage onBack={() => setShowSubscriptionPage(false)} />
+          </div>
+        )}
+        {!showSubscriptionPage && activeTab === "dashboard" && renderDashboard()}
+        {!showSubscriptionPage && activeTab === "workouts" && (
           <div className="animate-fade-in">
             <WorkoutTracker
               onWorkoutComplete={(caloriesBurned) => {
@@ -382,7 +389,7 @@ function FitnessAppContent() {
             />
           </div>
         )}
-        {activeTab === "calories" && (
+        {!showSubscriptionPage && activeTab === "calories" && (
           <div className="animate-fade-in">
             <CalorieTracker
               dailyStats={dailyStats}
@@ -404,17 +411,17 @@ function FitnessAppContent() {
             />
           </div>
         )}
-        {activeTab === "goals" && isSubscribed && (
+        {!showSubscriptionPage && activeTab === "goals" && isSubscribed && (
           <div className="animate-fade-in">
             <WeightGoals weightGoal={weightGoal} onWeightGoalUpdate={setWeightGoal} />
           </div>
         )}
-        {activeTab === "trainer" && (
+        {!showSubscriptionPage && activeTab === "trainer" && (
           <div className="animate-fade-in">
             <PersonalTrainer weightGoal={weightGoal} />
           </div>
         )}
-        {activeTab === "profile" && (
+        {!showSubscriptionPage && activeTab === "profile" && (
           <div className="animate-fade-in">
             <UserProfile />
           </div>
@@ -431,7 +438,13 @@ function FitnessAppContent() {
               <Button
                 key={item.id}
                 variant="ghost"
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  if (item.id === "trainer" && !isSubscribed) {
+                    setShowSubscriptionPage(true)
+                  } else {
+                    setActiveTab(item.id)
+                  }
+                }}
                 className={`flex flex-col items-center justify-center py-2 rounded-lg ${
                   isActive ? "text-primary" : "text-muted-foreground"
                 }`}

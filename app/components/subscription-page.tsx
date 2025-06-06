@@ -108,7 +108,7 @@ export default function SubscriptionPage({ onBack }: SubscriptionPageProps) {
               <Crown className="h-12 w-12 text-primary" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold">Viligant Premium</h2>
+              <h2 className="text-2xl font-bold">Vigilant Premium</h2>
               <p className="text-muted-foreground mt-2">
                 Take your fitness journey to the next level with advanced analytics and insights
               </p>
